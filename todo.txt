@@ -1,0 +1,5 @@
+set up preload interface with main and renderer.
+set up REST API interface with server.
+    - user auth
+    - fetch workout records
+    - modify workout records (CRUD)

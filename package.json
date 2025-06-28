@@ -1,0 +1,42 @@
+{
+  "name": "training",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": {
+    "name": "Enfortis Technologies",
+    "email": "mark@enfortistechnologies.com"
+  },
+  "description": "Weight Training Application",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "electron-log": "^5.4.1",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-winstaller": "^5.4.0",
+    "ws": "^8.18.2"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "make": "electron-forge make",
+    "package": "electron-forge package",
+    "publish": "electron-forge publish",
+    "clean": "rimraf ./dist"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.8.1",
+    "@electron-forge/maker-deb": "^7.8.1",
+    "@electron-forge/maker-rpm": "^7.8.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
+    "@electron-forge/maker-zip": "^7.8.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
+    "@electron-forge/plugin-fuses": "^7.8.1",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^25.0.0",
+    "electron-prebuilt-compile": "8.2.0"
+  },
+  "config": {
+    "forge": "./forge.config.js"
+  }
+}
+
