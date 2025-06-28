@@ -12,26 +12,15 @@ const log = require('electron-log');
 
 log.transports.file.level = 'info'; // or 'debug' for more detail
 log.info('App starting...');
- 
-let targetIpAddress = null;
-let targetIpPort = null;
+
 
 let mainWindow;
-let STATUS_PORT = null;
-let SERVER_ADDR = process.env.SERVER_ADDR;
-let UDP_CLIENT_ADDR = null;
-let AUTH_PORT = null;
-let userRole = null;
-
-console.log('SERVER_ADDR=', SERVER_ADDR);
-log.info('SERVER_ADDR=', SERVER_ADDR);
-
-
-
-
-/////////////////////////////////////////
-// start new code
-/////////////////////////////////////////
+let SERVER_ADDR = "127.0.0.1";
+let HTTP_PORT = 80;
+let UserName = '';
+let accessToken = '';
+let refreshToken = '';
+let rendererIsReady = false;
 
 
 const mainWindowRef = { mainWindow: null, accessToken: '', refreshToken: '', token: '' };
@@ -74,10 +63,7 @@ const mainWindowRef = { mainWindow: null, accessToken: '', refreshToken: '', tok
   }
 })();
 
-let UserName = '';
-let accessToken = '';
-let refreshToken = '';
-let rendererIsReady = false;
+
 
 function initializeMainWindowApp(mainWindowRef, STATUS_PORT) {
   return new Promise((resolve) => {
@@ -136,6 +122,55 @@ function initializeMainWindowApp(mainWindowRef, STATUS_PORT) {
   });
 }
 
+// fetch configuration info from server
+// TODO: this iterface needs to be changed to HTTP REST
+async function initializeApp() {
+
+    console.log(`initializing app: `);
+
+    const connAddr = `https://${SERVER_ADDR}:${HTTP_PORT}/login`;
+    console.log(`connAddr: ${connAddr}`);
+
+    try {
+        const response = await axios.post(connAddr, {
+            username,
+            password
+        }, {
+            httpsAgent: new https.Agent({ rejectUnauthorized: false })
+        });
+
+        console.log("log in response: ", response.data);
+        accessToken = response.data.accessToken;
+        refreshToken = response.data.refreshToken;
+        userRole = response.data.userRole;
+
+        console.log("Access token: ", accessToken);
+        console.log("Refresh token: ", refreshToken);
+        console.log("User role: ", userRole);
+
+        mainWindowRef.mainWindow.webContents.send('login-response', {
+            success: true,
+            userRole: userRole
+        });
+
+    } catch (error) {
+        if (error.response) {
+            console.error(`Login failed (${error.response.status}):`, error.response.data);
+            mainWindowRef.mainWindow.webContents.send('login-response', {
+                success: false,
+                status: error.response.status,
+                message: error.response.data
+            });
+        } else {
+            console.error('Login request error:', error.message);
+            mainWindowRef.mainWindow.webContents.send('login-response', {
+                success: false,
+                message: 'Network or server error'
+            });
+        }
+    }
+}
+
 // user event handlers
 // Token-aware request function (you can place this in a shared module)
 async function authRequest(config, retry = true) {
@@ -189,55 +224,11 @@ ipcMain.on('user-logout', (event) => {
 });
 
 
-// fetch configuration info from server
-async function initializeApp() {
-  return new Promise((resolve, reject) => {
-    const serverAddress = 'ws://' + SERVER_ADDR + ':8080';
-    console.log('initializeApp() connecting to: ', serverAddress);
-    log.info('initializeApp() connecting to: ', serverAddress);
-    const ws = new WebSocket(serverAddress);
 
-    ws.onopen = () => {
-      console.log('Connected to Websocket server');
-      log.info('connected to Websocket server');
 
-      ws.send('get-config-inv');
-    };
 
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
 
-      if (message.type === 'config-data') {
-        const data = message.data;
-        console.log(`msg.type==='config-data: ${data}`);
 
-        if (Array.isArray(data) && data.length > 0) {
-          const item = data[0];
-          const config = {
-            server_addr: item.server_addr,
-            server_port: item.server_port,
-            auth_port: item.auth_port,
-            status_port: item.status_port
-          };
-
-          ws.close();
-          resolve(config); // ✅ Return config here
-        } else {
-          ws.close();
-          reject(new Error('No config data received.'));
-        }
-      } else if (message.type === 'error') {
-        ws.close();
-        reject(new Error(`Server error: ${message.message}`));
-      }
-    };
-
-    ws.onerror = (error) => {
-      ws.close();
-      reject(new Error('WebSocket error: ' + error.message));
-    };
-  });
-}
 
 // setup UDP client
 function initializeUDPClient(mainWindow, STATUS_PORT) {
