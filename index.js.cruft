@@ -1,0 +1,70 @@
+
+  try {
+    const config = await initializeApp();
+    if (config) {
+      // initialize 
+      console.log("received config:", config);
+      log.info('[INIT] received config', config);
+    //   SERVER_ADDR = config.server_addr;
+      SERVER_PORT = config.server_port;
+      STATUS_PORT = config.status_port;
+      AUTH_PORT = config.auth_port;
+
+      
+      // initializeMainWindowApp(mainWindowRef, state);
+      await initializeMainWindowApp(mainWindowRef, STATUS_PORT);
+
+      initializeUDPClient(mainWindowRef.mainWindow, STATUS_PORT);
+
+    } else {
+      // handle missing config case
+      console.log('unable to load configurations');
+      log.info('[INIT] unable to load configurations');
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error('App initialization failed', err);
+    log.error('[INIT] App initializaton failed', err);
+    process.exit(1);
+  }
+
+
+  // fetch configuration info from server
+// TODO: this iterface needs to be changed to HTTP REST
+async function initializeApp() {
+    console.log(`initializing app...`);
+
+    const connAddr = `https://${SERVER_ADDR}:${HTTP_PORT}/initialize`;
+    console.log(`connAddr: ${connAddr}`);
+
+    try {
+        const response = await axios.get(connAddr, {
+            httpsAgent: new https.Agent({ rejectUnauthorized: false })
+        });
+
+        console.log("Initialization response:", response.data);
+
+        const connectPort = response.data?.parameter?.connectPort;
+
+        if (!connectPort) {
+            console.error("Missing 'connectPort' in response.");
+            return null;
+        }
+
+        // Return the expected config object
+        return {
+            server_port: connectPort,
+            status_port: connectPort,
+            auth_port: connectPort
+        };
+
+    } catch (error) {
+        if (error.response) {
+            console.error(`Initialization failed (${error.response.status}):`, error.response.data);
+        } else {
+            console.error('Initialization request error:', error.message);
+        }
+
+        return null;
+    }
+}
