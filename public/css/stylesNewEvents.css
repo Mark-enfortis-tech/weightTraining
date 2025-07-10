@@ -1,0 +1,253 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f0f4f8;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 999;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 1.8rem; /* more rounded */
+  padding: 3.5rem 2rem 4rem; /* taller with more vertical padding */
+  max-width: 300px; /* narrower */
+  width: 70vw; /* narrower for mobile */
+  box-shadow: 0 12px 30px rgba(62, 207, 142, 0.3); /* greenish shadow */
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center horizontally */
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+/* Title nav container */
+.title-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 1.7rem;
+  margin-bottom: 2rem;
+  color: #27ae60; /* vibrant green */
+  font-weight: 700;
+}
+
+.modal-form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Override label styling inside vertical-flex */
+.modal-form .vertical-flex label {
+  width: 100%;
+  max-width: 160px;
+  text-align: center;
+  margin-bottom: 0; /* no extra margin since gap handles spacing */
+}
+
+.modal-form input,
+.modal-form select {
+  margin-top: 0.6rem;
+  padding: 0.75rem 1rem;
+  border: 2.5px solid #c1e1c1; /* subtle greenish border */
+  border-radius: 1rem; /* smoother inputs */
+  font-size: 1rem;
+  background-color: #fafafa;
+  color: #2c3e50;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+}
+
+.modal-form input:focus,
+.modal-form select:focus {
+  border-color: #3ecf8e;
+  box-shadow: 0 0 8px #3ecf8eaa;
+  outline: none;
+}
+
+/* Container for the vertically stacked set, weight, reps */
+.modal-form .vertical-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+/* Smaller max-width for inputs inside vertical-flex */
+.modal-form .vertical-flex input {
+  max-width: 160px;
+  width: 100%;
+}
+
+/* Placeholder for future Actual Reps */
+.modal-form .empty-placeholder {
+  height: 70px;
+  width: 100%;
+  max-width: 160px;
+  margin-top: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+button {
+  padding: 0.75rem 1.6rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn {
+  background-color: #bdc3c7;
+  color: #fff;
+}
+
+.cancel-btn:hover {
+  background-color: #95a5a6;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center; /* center buttons horizontally */
+  gap: 10%; /* space between buttons is 10% of the container's width */
+  margin-top: 2rem;
+}
+
+
+.submit-btn {
+  background-color: #3ecf8e;
+  color: #fff;
+  box-shadow: 0 6px 16px #30b273cc;
+}
+
+.submit-btn:hover {
+  background-color: #30b273;
+  box-shadow: 0 8px 20px #27ae6011;
+}
+
+.modal-form .row-flex {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap; /* allow wrapping on small screens */
+}
+
+.modal-form label {
+  flex: 1 1 100%; /* full width by default */
+}
+
+.modal-form .row-flex label {
+  flex: 1 1 45%; /* about half width but can shrink */
+}
+
+.modal-form label input,
+.modal-form label select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+  border: 2px solid #c1e1c1;
+  background-color: #fafafa;
+  color: #2c3e50;
+}
+
+/* Make these inputs smaller */
+.modal-form .small-input {
+  max-width: 90px; /* less than half width */
+}
+
+/* Responsive tweak for very small screens */
+@media (max-width: 360px) {
+  .modal {
+    width: 95vw;
+    padding: 2rem 1.5rem;
+    max-width: 360px;
+  }
+
+  .modal-form .row-flex label {
+    flex: 1 1 100%; /* stack vertically on very narrow screens */
+  }
+}
+
+/* Container for Set, nav arrows, and Weight in a row */
+.horizontal-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+/* Inline label style for Set and Weight labels inside the row */
+.inline-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 120px;
+  flex-shrink: 0;
+}
+
+/* Nav arrow buttons style */
+.nav-arrow {
+  background-color: #3ecf8e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 6px 16px #30b273cc;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-arrow:hover {
+  background-color: #30b273;
+  box-shadow: 0 8px 20px #27ae6011;
+}
+

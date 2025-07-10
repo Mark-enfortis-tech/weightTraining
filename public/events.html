@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exercise Event</title>
+  <link rel="stylesheet" href="css/stylesNewEvents.css" />
+</head>
+<body>
+  <div class="modal-overlay">
+    <div class="modal">
+      
+      <!-- Title nav container -->
+      <div class="title-nav-container">
+        <button type="button" class="nav-arrow nav-left" aria-label="Previous">&#9664;</button>
+        <h2 class="modal-title">Exercise Event</h2>
+        <button type="button" class="nav-arrow nav-right" aria-label="Next">&#9654;</button>
+      </div>
+
+      <form class="modal-form">
+        <label>
+          Date:
+          <input type="date" name="date" required />
+        </label>
+
+        <label>
+          Exercise Type:
+          <select name="exercise">
+            <option value="bench">Bench Press</option>
+            <option value="squat">Squat</option>
+            <option value="deadlift">Deadlift</option>
+            <option value="pullup">Pull-Up</option>
+          </select>
+        </label>
+
+        <div class="vertical-flex">
+            <label>
+                Set:
+                <input type="number" name="set" min="1" required class="small-input" />
+            </label>
+            <label>
+                Weight (kg):
+                <input type="number" name="weight" min="0" required class="small-input" />
+            </label>
+            <label>
+                Planned Reps:
+                <input type="number" name="reps" min="1" required class="small-input" />
+            </label>
+
+            <!-- Actual Reps field -->
+            <label>
+                Actual Reps:
+                <input type="number" name="actual_reps" min="0" class="small-input" />
+            </label>
+            </div>
+
+        <div class="button-group">
+          <button type="button" class="cancel-btn">Cancel</button>
+          <button type="submit" class="submit-btn">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

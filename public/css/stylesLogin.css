@@ -1,0 +1,143 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f0f4f8;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 999;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 1.8rem;
+  padding: 2.5rem 1.5rem;
+  width: 300px;
+  height: 580px;
+  box-shadow: 0 12px 30px rgba(62, 207, 142, 0.3);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 1.7rem;
+  margin-bottom: 20vh;
+  color: #27ae60;
+  font-weight: 700;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.login-form .vertical-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+  justify-content: center;
+
+  /* 👇 Pull inputs upward by 20% of modal height */
+  transform: translateY(-20%);
+}
+
+
+.login-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #2c3e50;
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
+}
+
+.login-form input {
+  margin-top: 0.6rem;
+  padding: 0.75rem 1rem;
+  border: 2.5px solid #c1e1c1;
+  border-radius: 1rem;
+  font-size: 1rem;
+  background-color: #fafafa;
+  color: #2c3e50;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login-form input:focus {
+  border-color: #3ecf8e;
+  box-shadow: 0 0 8px #3ecf8eaa;
+  outline: none;
+}
+
+/* Button group (centered, matching event style) */
+.login-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10%;
+  margin-top: 2rem;
+}
+
+/* Unified button base */
+button {
+  padding: 0.75rem 1.6rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Cancel button style */
+.cancel-btn {
+  background-color: #bdc3c7;
+  color: #fff;
+}
+
+.cancel-btn:hover {
+  background-color: #95a5a6;
+}
+
+/* Submit/login button style */
+.submit-btn {
+  background-color: #3ecf8e;
+  color: #fff;
+  box-shadow: 0 6px 16px #30b273cc;
+}
+
+.submit-btn:hover {
+  background-color: #30b273;
+  box-shadow: 0 8px 20px #27ae6011;
+}
+
