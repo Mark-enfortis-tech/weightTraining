@@ -63,7 +63,7 @@ const mainWindowRef = { mainWindow: null, accessToken: '', refreshToken: '', tok
     console.log('[INIT] AUTH_PORT', AUTH_PORT);
     console.log('[INIT] STATUS_PORT', STATUS_PORT);
 
-    handleLoginAndFetchEvents();
+    // handleLoginAndFetchEvents();   // test code
 
     await initializeMainWindowApp(mainWindowRef, STATUS_PORT);
 
@@ -116,7 +116,7 @@ function initializeMainWindowApp(mainWindowRef, STATUS_PORT) {
 
       // Load the file AFTER attaching listeners
       mainWindowRef.mainWindow.loadFile(
-        path.join(__dirname, 'public', 'index.html')
+        path.join(__dirname, 'public', 'login.html')
       );
       mainWindowRef.mainWindow.webContents.openDevTools();
 

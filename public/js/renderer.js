@@ -1,0 +1,311 @@
+// render.js (Renderer Process)
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Page Loaded");
+
+    ////////////////////////////////
+    // global vars
+    ////////////////////////////////
+    let userId = 0;
+    const state = new State();
+    state.setLoggedInStatus(false);
+
+
+
+
+
+
+    ////////////////////////////////
+    // event handlers
+    ////////////////////////////////
+
+    ////////////////////
+    // login form
+    ////////////////////
+    const loginForm = document.querySelector('.login-form');
+    const cancelBtnLi = document.querySelector('.cancel-btn-li');
+    const submitBtnLi = document.querySelector('.submit-btn-li');
+    const modalOverlayLi = document.querySelector('.modal-overlay-login');
+
+    // Handle form submission
+    loginForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const username = loginForm.username.value.trim();
+        const password = loginForm.password.value;
+
+        if (username === '' || password === '') {
+            showToast("Please enter both username and password", "error");
+            return;
+        }
+
+        console.log('Form submitted with:');
+        console.log('Username:', username);
+        console.log('Password:', password);
+
+        // send message to index.js
+        window.electronAPI.userLogin({ username: username, password: password });
+
+        loginForm.reset();
+        modalOverlayLi.style.display = 'none'; // hide modal
+    });
+
+    // Handle cancel button
+    cancelBtnLi.addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent form submission
+        loginForm.reset(); // Clear the form
+        modalOverlayLi.style.display = 'none'; // Hide modal
+        console.log('Login cancelled.');
+    });
+
+  
+    ////////////////////
+    // index page
+    ////////////////////
+
+        const newEventBtn = document.getElementById("newEventBtn");
+    const eventBtn = document.getElementById("EventBtn");
+
+    // Handler for New Event
+    newEventBtn.addEventListener("click", function () {
+      console.log("New Event button clicked");
+      // Example action: redirect to new-event.html
+      window.location.href = "new-event.html";
+    });
+
+    // Handler for Event
+    eventBtn.addEventListener("click", function () {
+      console.log("Event button clicked");
+      // Example action: redirect to events.html
+      window.location.href = "events.html";
+    });
+
+    ////////////////////
+    // events form
+    ////////////////////
+    const eventsModalOverlay = document.querySelector(".modal-overlay-e");
+    const addEventBtn = document.querySelector(".add-event-btn");
+    const eventBackBtn = document.querySelector(".back-btn-e");
+    const eventCancelBtn = document.querySelector(".cancel-btn-e");
+    const eventSubmitBtn = document.querySelector(".submit-btn-e");
+    const navLeft = document.querySelector(".nav-left");
+    const navRight = document.querySelector(".nav-right");
+    const form = document.querySelector(".modal-form-e");
+
+    // Example: list of mock events for navigation
+    const eventData = [
+      {
+        date: "2025-07-01",
+        exercise: "bench",
+        set: 3,
+        weight: 100,
+        reps: 8,
+        actual_reps: 8,
+      },
+      {
+        date: "2025-07-03",
+        exercise: "squat",
+        set: 5,
+        weight: 120,
+        reps: 5,
+        actual_reps: 5,
+      }
+    ];
+
+    let currentEventIndex = 0;
+
+    // Fill the form with data
+    function populateForm(data) {
+      form.date.value = data.date;
+      form.exercise.value = data.exercise;
+      form.set.value = data.set;
+      form.weight.value = data.weight;
+      form.reps.value = data.reps;
+      form.actual_reps.value = data.actual_reps || "";
+    }
+
+    // Handle Add Event (show modal)
+    addEventBtn.addEventListener("click", () => {
+      eventsModalOverlay.style.display = "flex";
+      form.reset();
+      currentEventIndex = eventData.length; // Treat as new entry
+    });
+
+    // Handle Back Button
+    eventBackBtn.addEventListener("click", () => {
+      eventsModalOverlay.style.display = "none";
+    });
+
+    // Handle Cancel Button
+    eventCancelBtn.addEventListener("click", () => {
+      if (confirm("Discard changes?")) {
+        eventsModalOverlay.style.display = "none";
+      }
+    });
+
+    // Handle Submit
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const formData = {
+        date: form.date.value,
+        exercise: form.exercise.value,
+        set: parseInt(form.set.value, 10),
+        weight: parseFloat(form.weight.value),
+        reps: parseInt(form.reps.value, 10),
+        actual_reps: form.actual_reps.value ? parseInt(form.actual_reps.value, 10) : null,
+      };
+
+      if (currentEventIndex >= eventData.length) {
+        eventData.push(formData); // Add new
+        showToast("Event added", "success");
+      } else {
+        eventData[currentEventIndex] = formData; // Update existing
+        showToast("Event updated", "success");
+      }
+
+      eventsModalOverlay.style.display = "none";
+    });
+
+    // Handle Left Nav
+    navLeft.addEventListener("click", () => {
+      if (currentEventIndex > 0) {
+        currentEventIndex--;
+        populateForm(eventData[currentEventIndex]);
+      } else {
+        showToast("This is the first event", "success");
+      }
+    });
+
+    // Handle Right Nav
+    navRight.addEventListener("click", () => {
+      if (currentEventIndex < eventData.length - 1) {
+        currentEventIndex++;
+        populateForm(eventData[currentEventIndex]);
+      } else {
+        showToast("This is the last event", "success");
+      }
+    });
+
+    // Optional: preload first event if any
+    if (eventData.length > 0) {
+      populateForm(eventData[0]);
+    }
+
+
+
+
+    ////////////////////////////////
+    // show login modal on load
+    ////////////////////////////////
+    if (!state.getLoggedInStatus()) {
+        modalOverlayLi.style.display = 'flex'; // show modal if not logged in
+    }
+
+
+   
+
+    ////////////////////////////////
+    // IPC handlers
+    ////////////////////////////////
+
+    // Receive login response
+    window.electronAPI.onLoginResponse((response) => {
+        console.log("Login response:", response);
+
+        if (response.success == true) {
+            showToast("Login successful", "success");
+            console.log("login successful");
+
+        } else {
+            showToast("Login failed: " + response.message, "error");
+            console.log("login not successful");
+        }
+        loginForm.reset();
+    });
+
+
+
+
+
+    ////////////////////////////////
+    // misc functions
+    ////////////////////////////////
+
+    // toast implementation
+    function showToast(message, type = "success") {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.classList.add("toast", type);
+        toast.textContent = message;
+
+        container.appendChild(toast);
+
+        // Remove after animation
+        setTimeout(() => {
+            toast.remove();
+        }, 3500);
+    }
+
+
+
+
+}); // end of 'DOMContentLoaded()
+
+
+class State {
+    constructor() {
+      this.isLoggedIn = false;
+      this.username = "";
+      this.userId = 0;
+      this.userRole = "";
+    }
+
+    // Getter for isLoggedIn
+    getLoggedInStatus() {
+      console.log(`getLoggedInStatus(): ${this.isLoggedIn}`);
+      return this.isLoggedIn;
+    }
+  
+    // Setter for isLoggedIn
+    setLoggedInStatus(status) {
+      console.log(`setLoggedInStatus(): ${status}}`);
+      this.isLoggedIn = status;
+    }
+
+    // Getter for username
+    getUsername() {
+      console.log(`getUsername(): ${this.username}`);
+      return this.username;
+    }
+  
+    // Setter for username
+    setUsername(name) {
+      console.log(`setUsername(): ${name}}`);
+      this.username = name;
+    }
+
+    // Getter for cmdID
+    getUserId() {
+        console.log(`getUserId(): ${this.userId}`);
+        return this.userId;
+    }
+    
+    // Setter for cmdID
+    setUserId(value) {
+    console.log(`setUserId(): ${value}}`);
+    this.userId = value;
+    }
+
+    // getter for isAdmin
+    getUserRole() {
+        console.log(`getUserRole(): ${this.userRole}`);
+        return this.userRole;
+    }
+
+    // setter for isAdmin
+    setUserRole(status) {
+        this.userRole = status;
+        console.log(`setUserRole(): ${this.userRole}`);
+    }
+
+  }

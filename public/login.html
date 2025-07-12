@@ -2,41 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exercise Program</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
   <link rel="stylesheet" href="css/stylesLogin.css" />
 </head>
 <body>
-
-    <div class="modal-overlay">
-        <div class="modal login-modal">
-            <h2 class="modal-title">Login</h2>
-
-            <form class="modal-form login-form">
-            <div class="vertical-flex">
-                <label>
-                Username
-                <input type="text" name="username" required />
-                </label>
-                <label>
-                Password
-                <input type="password" name="password" required />
-                </label>
-            </div>
-
-            <div class="button-group login-buttons">
-                <button class="cancel-btn">Cancel</button>
-                <button class="submit-btn">Submit</button>
-            </div>
-            </form>
+  <div class="modal-overlay-login">
+    <div class="modal-login">
+      <h2 class="modal-title-login">Login</h2>
+      <form class="login-form">
+        <div class="vertical-flex-login">
+          <label for="username">
+            Username
+            <input type="text" id="username" name="username" required />
+          </label>
+          <label for="password">
+            Password
+            <input type="password" id="password" name="password" required />
+          </label>
         </div>
-</div>
-
+        <div class="login-buttons-login">
+          <button type="button" class="cancel-btn-login">Cancel</button>
+          <button type="submit" class="submit-btn-login">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
-
-
-
-
-
-
