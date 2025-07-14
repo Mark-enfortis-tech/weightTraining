@@ -194,6 +194,14 @@ ipcMain.on('save-event', async (event, data) => {
 });
 
 
+// fetch event range
+ipcMain.on('fetch-events', async (event, data) => {
+    console.log('received fetchEvents request:', data);
+    const {startDate, endDate} = data;
+    getEventsByDateRange(userId, startDate, endDate) 
+});
+
+
 
 
 
@@ -675,7 +683,9 @@ async function loginUser(userName, password) {
 async function getEventsByDateRange(userId, startDate, endDate) {
     console.log(`Fetching events for userId: ${userId}, start: ${startDate}, end: ${endDate}`);
 
-    const connAddr = `http://localhost:80/events/range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`;
+    const connAddr = `http://localhost:80/events/range?userId=${encodeURIComponent(userId)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+
+    // const connAddr = `http://localhost:80/events/range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`;
     console.log(`connAddr: ${connAddr}`);
 
     try {

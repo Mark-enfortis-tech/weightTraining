@@ -85,9 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
       newEventsModalOverlay.style.display = "flex";
     });
 
-    // Handler for Event
+    // Handler for Events
     eventBtn.addEventListener("click", function () {
       console.log("Event button clicked");
+      const _startDate = getCurrentDate();
+      const _endDate = addDaysToDate(_startDate, 7);
+
+      const data = {startDate: _startDate, 
+                    endDate: _endDate}
+      
+      console.log('sending date data to index.js: ', data);
+
+      window.electronAPI.fetchEvents(data);
       modalOverlaySelection.style.display = "none";
       eventsModalOverlay.style.display = "flex";
     });
@@ -332,6 +341,26 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.remove();
         }, 3500);
     }
+
+    // date function
+    function getCurrentDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // months are 0-based
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // add to date
+    function addDaysToDate(dateStr, daysToAdd) {
+      const date = new Date(dateStr);
+      date.setDate(date.getDate() + daysToAdd);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
 
 
 
