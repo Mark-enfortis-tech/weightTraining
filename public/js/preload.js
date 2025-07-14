@@ -4,7 +4,10 @@ const { contextBridge, ipcRenderer} = require("electron");
 
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  
+
+    saveEvent: (commands) => ipcRenderer.send('save-event', commands),
+    onSaveEventResponse: (callback) => ipcRenderer.on('save-event-response', (_, data) => callback(data)),
+    
  
     sendCommands: (commands) => ipcRenderer.send('send-commands', commands),
     onReceiveCommands: (callback) => ipcRenderer.on('receive-commands', (_, data) => callback(data)),

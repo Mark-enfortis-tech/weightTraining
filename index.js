@@ -185,8 +185,13 @@ ipcMain.on('user-logout', (event) => {
     deleteUserStats(UserName);
 });
 
+//async function createEvent({ userId, date, exerType, set, weight, plannedReps, actualReps 
 
-
+// save new event
+ipcMain.on('save-event', async (event, data) => {
+    const { userId, date, exerType="exercise", set, weight, plannedReps, actualReps} = data;
+    createEvent({ userId, date, exerType, set, weight, plannedReps, actualReps });
+});
 
 
 
@@ -765,7 +770,7 @@ async function createEvent({ userId, date, exerType, set, weight, plannedReps, a
 
         console.log('Event created:', response.data);
 
-        mainWindowRef.mainWindow.webContents.send('event-create-response', {
+        mainWindowRef.mainWindow.webContents.send('save-event-response', {
             success: true,
             event: response.data
         });

@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // event handlers
     ////////////////////////////////
 
+
+
     ////////////////////
     // index page
     ////////////////////
@@ -79,22 +81,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handler for New Event
     newEventBtn.addEventListener("click", function () {
       console.log("New Event button clicked");
-      // Example action: redirect to new-event.html
-      window.location.href = "new-event.html";
+      modalOverlaySelection.style.display = "none";
+      newEventsModalOverlay.style.display = "flex";
     });
 
     // Handler for Event
     eventBtn.addEventListener("click", function () {
       console.log("Event button clicked");
-      // Example action: redirect to events.html
-      window.location.href = "events.html";
+      modalOverlaySelection.style.display = "none";
+      eventsModalOverlay.style.display = "flex";
     });
 
     ////////////////////
-    // events form
+    // EVENTS PAGE
     ////////////////////
-    const eventsModalOverlay = document.querySelector(".modal-overlay-e");
-    const addEventBtn = document.querySelector(".submit-btn-ne");
+    const eventsModalOverlay = document.querySelector(".modal-overlay-events");
     const eventBackBtn = document.querySelector(".back-btn-event");
     const eventCancelBtn = document.querySelector(".cancel-btn-event");
     const eventSubmitBtn = document.querySelector(".submit-btn-event");
@@ -135,8 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handle Add Event (show modal)
-    addEventBtn.addEventListener("click", () => {
-      console.log('submit button pressed');
+    eventSubmitBtn.addEventListener("click", () => {
+      console.log('event submit button pressed');
       // eventsModalOverlay.style.display = "flex";
       // form.reset();
       // currentEventIndex = eventData.length; // Treat as new entry
@@ -144,20 +145,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle Back Button
     eventBackBtn.addEventListener("click", () => {
-      // eventsModalOverlay.style.display = "none";
-      console.log('back button pressed');
+      eventsModalOverlay.style.display = "none";
+      modalOverlaySelection.style.display = "flex";
+      console.log('event back button pressed');
     });
 
     // Handle Cancel Button
     eventCancelBtn.addEventListener("click", () => {
       if (confirm("Discard changes?")) {
         // eventsModalOverlay.style.display = "none";
-        console.log('cancel button pressed');
+        console.log('event cancel button pressed');
       }
     });
 
     // Handle Submit
     form.addEventListener("submit", (e) => {
+    
       e.preventDefault();
 
       const formData = {
@@ -206,6 +209,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    ////////////////////
+    // NEW EVENTS PAGE
+    ////////////////////
+    const newEventsModalOverlay = document.querySelector(".modal-overlay-ne");
+    const newEventBackBtn = document.querySelector(".back-btn-ne");
+    const newEventCancelBtn = document.querySelector(".cancel-btn-ne");
+    const newEventSubmitBtn = document.querySelector(".submit-btn-ne");
+    const newEventForm = document.querySelector(".modal-form-ne");
+
+ 
+
+    // Handle Back Button
+    newEventBackBtn.addEventListener("click", () => {
+      console.log('new back button pressed');
+      newEventsModalOverlay.style.display = "none";
+      modalOverlaySelection.style.display = "flex";
+    });
+
+    // Handle Cancel Button
+    newEventCancelBtn.addEventListener("click", () => {
+      console.log('new event cancel button pressed');
+    });
+
+    // Handle Submit
+    newEventForm.addEventListener("submit", (e) => {
+      console.log('new event submit button pressed');
+      e.preventDefault();
+
+      const formData = {
+        userId: userId,
+        date: form.date.value,
+        exerType: form.exercise.value,
+        set: parseInt(form.set.value, 10),
+        weight: parseFloat(form.weight.value),
+        plannedReps: parseInt(form.reps.value, 10),
+        actualReps: 0,
+      };
+
+      console.log('formData:\n' + JSON.stringify(formData, null, 2));
+
+      if (currentEventIndex >= eventData.length) {
+        eventData.push(formData); // Add new
+        showToast("Event added", "success");
+      } else {
+        eventData[currentEventIndex] = formData; // Update existing
+        showToast("Event updated", "success");
+      }
+
+      window.electronAPI.saveEvent(formData);
+
+      // NewEventsModalOverlay.style.display = "none";
+    });
+
+
 
 
     ////////////////////////////////
@@ -237,6 +294,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("login not successful");
         }
         loginForm.reset();
+    });
+
+
+    window.electronAPI.onSaveEventResponse((response) => {
+      console.log("Save event response:", response);
+
+      if (response.success == true) {
+            showToast("Save event successful", "success");
+            console.log("Save event successful");
+
+        } else {
+            showToast("Save event failed: " + response.message, "error");
+            console.log("Save event not successful");
+        }
     });
 
 
