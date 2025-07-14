@@ -116,7 +116,7 @@ function initializeMainWindowApp(mainWindowRef, STATUS_PORT) {
 
       // Load the file AFTER attaching listeners
       mainWindowRef.mainWindow.loadFile(
-        path.join(__dirname, 'public', 'login.html')
+        path.join(__dirname, 'public', 'index.html')
       );
       mainWindowRef.mainWindow.webContents.openDevTools();
 

@@ -19,15 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
     ////////////////////////////////
 
     ////////////////////
-    // login form
+    // index page
     ////////////////////
     const loginForm = document.querySelector('.login-form');
-    const cancelBtnLi = document.querySelector('.cancel-btn-li');
-    const submitBtnLi = document.querySelector('.submit-btn-li');
+    const cancelBtnLi = document.querySelector('.cancel-btn-login');
+    const submitBtnLi = document.querySelector('.submit-btn-login');  // optional, not strictly used
     const modalOverlayLi = document.querySelector('.modal-overlay-login');
+    console.log("loginForm:", loginForm);
+    console.log("cancelBtnLi:", cancelBtnLi);
+    console.log("submitBtnLi:", submitBtnLi);
 
     // Handle form submission
     loginForm.addEventListener('submit', function (e) {
+      showToast("form submitted", "success");
+      
         e.preventDefault(); // Prevent default form submission
 
         const username = loginForm.username.value.trim();
@@ -43,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Password:', password);
 
         // send message to index.js
-        window.electronAPI.userLogin({ username: username, password: password });
+        window.electronAPI.userLogin({ userName: username, password: password });
 
         loginForm.reset();
         modalOverlayLi.style.display = 'none'; // hide modal
@@ -53,17 +58,23 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelBtnLi.addEventListener('click', function (e) {
         e.preventDefault(); // Prevent form submission
         loginForm.reset(); // Clear the form
-        modalOverlayLi.style.display = 'none'; // Hide modal
+        // modalOverlayLi.style.display = 'none'; // Hide modal
         console.log('Login cancelled.');
     });
 
-  
-    ////////////////////
-    // index page
-    ////////////////////
 
-        const newEventBtn = document.getElementById("newEventBtn");
-    const eventBtn = document.getElementById("EventBtn");
+
+
+    ////////////////////
+    // selection page
+    ////////////////////
+    const modalOverlaySelection = document.querySelector('.modal-overlay-selection');
+    const newEventBtn = document.getElementById("newEventBtn");
+    console.log('newEventBtn: ', newEventBtn);
+
+    const eventBtn = document.getElementById("eventBtn");
+    console.log('newEventBtn: ', eventBtn);
+
 
     // Handler for New Event
     newEventBtn.addEventListener("click", function () {
@@ -83,13 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // events form
     ////////////////////
     const eventsModalOverlay = document.querySelector(".modal-overlay-e");
-    const addEventBtn = document.querySelector(".add-event-btn");
-    const eventBackBtn = document.querySelector(".back-btn-e");
-    const eventCancelBtn = document.querySelector(".cancel-btn-e");
-    const eventSubmitBtn = document.querySelector(".submit-btn-e");
+    const addEventBtn = document.querySelector(".submit-btn-ne");
+    const eventBackBtn = document.querySelector(".back-btn-event");
+    const eventCancelBtn = document.querySelector(".cancel-btn-event");
+    const eventSubmitBtn = document.querySelector(".submit-btn-event");
     const navLeft = document.querySelector(".nav-left");
     const navRight = document.querySelector(".nav-right");
-    const form = document.querySelector(".modal-form-e");
+    const form = document.querySelector(".modal-form-event");
 
     // Example: list of mock events for navigation
     const eventData = [
@@ -125,20 +136,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle Add Event (show modal)
     addEventBtn.addEventListener("click", () => {
-      eventsModalOverlay.style.display = "flex";
-      form.reset();
-      currentEventIndex = eventData.length; // Treat as new entry
+      console.log('submit button pressed');
+      // eventsModalOverlay.style.display = "flex";
+      // form.reset();
+      // currentEventIndex = eventData.length; // Treat as new entry
     });
 
     // Handle Back Button
     eventBackBtn.addEventListener("click", () => {
-      eventsModalOverlay.style.display = "none";
+      // eventsModalOverlay.style.display = "none";
+      console.log('back button pressed');
     });
 
     // Handle Cancel Button
     eventCancelBtn.addEventListener("click", () => {
       if (confirm("Discard changes?")) {
-        eventsModalOverlay.style.display = "none";
+        // eventsModalOverlay.style.display = "none";
+        console.log('cancel button pressed');
       }
     });
 
@@ -215,6 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.success == true) {
             showToast("Login successful", "success");
             console.log("login successful");
+            modalOverlayLi.style.display = 'none'; // Hide index modal
+            modalOverlaySelection.style.display = 'flex'; // unhide selection modal
 
         } else {
             showToast("Login failed: " + response.message, "error");

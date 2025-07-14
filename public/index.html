@@ -2,33 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exercise Program</title>
-  <link rel="stylesheet" href="css/stylesIndex.css" />
-  <link rel="stylesheet" href="css/toast.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="main-container"></div>
+  <div id="toast-container"></div>
+  
+  <!-- Login page -->
+  <div class="modal-overlay-login">
+    <div class="modal-login">
+      <h2 class="modal-title-login">Login</h2>
+      <form class="login-form">
+        <div class="vertical-flex-login">
+          <label for="username">
+            Username
+            <input type="text" id="username" name="username" required />
+          </label>
+          <label for="password">
+            Password
+            <input type="password" id="password" name="password" required />
+          </label>
+        </div>
+        <div class="login-buttons-login">
+          <button type="button" class="cancel-btn-login">Cancel</button>
+          <button type="submit" class="submit-btn-login">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  <!-- Modal Overlay -->
-  <div class="modal-overlay-index" id="modalOverlay" style="display: flex;">
-    <div class="modal-index">
+  <!-- Selection page -->
+  <div class="modal-overlay-selection" id="modalOverlay">
+    <div class="modal-selection">
       <div class="title-container-index">
-        <h2 class="modal-title-index">Exercise Program</h2>
+        <h2 class="modal-title-selection">Exercise Program</h2>
       </div>
       <div class="modal-blank-space">
       </div>
         <div class="button-group">
-          <button type="button" class="index-buttons" id="newEventBtn">New Event</button>
-          <button type="button" class="index-buttons" id="EventBtn">Event</button>
-        </div>
-      
+          <button type="button" class="selection-buttons" id="newEventBtn">New Event</button>
+          <button type="button" class="selection-buttons" id="eventBtn">Event</button>
+        </div> 
     </div>
   </div>
 
+  <!-- New Event page -->
+  <div class="modal-overlay-new-events">
+    <div class="modal-new-events">
+      <h2 class="modal-title">New Exercise Event</h2>
+      <form class="modal-form">
+        <label>
+          Date:
+          <input type="date" name="date" required />
+        </label>
+        <label>
+          Exercise Type:
+          <select name="exercise">
+            <option value="bench">Bench Press</option>
+            <option value="squat">Squat</option>
+            <option value="deadlift">Deadlift</option>
+            <option value="pullup">Pull-Up</option>
+          </select>
+        </label>
 
+        <div class="vertical-flex">
+          <label>
+            Set:
+            <input type="number" name="set" min="1" required class="small-input" />
+          </label>
+          <label>
+            Weight (kg):
+            <input type="number" name="weight" min="0" required class="small-input" />
+          </label>
+          <label>
+            Planned Reps:
+            <input type="number" name="reps" min="1" required class="small-input" />
+          </label>
 
+          <!-- Placeholder for future Actual Reps field -->
+          <div class="empty-placeholder"></div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="cancel-btn-ne">Cancel</button>
+          <button type="submit" class="submit-btn-ne">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Events page -->
+  <div class="modal-overlay-events">
+    <div class="modal-event">
+
+      <!-- Title nav container -->
+      <div class="title-nav-container-event">
+        <button type="button" class="nav-arrow nav-left" aria-label="Previous">&#9664;</button>
+        <h2 class="modal-title-e">Exercise Event</h2>
+        <button type="button" class="nav-arrow nav-right" aria-label="Next">&#9654;</button>
+      </div>
+
+      <form class="modal-form-event">
+        <label>
+          Date:
+          <input type="date" name="date" required />
+        </label>
+
+        <label>
+          Exercise Type:
+          <select name="exercise">
+            <option value="bench">Bench Press</option>
+            <option value="squat">Squat</option>
+            <option value="deadlift">Deadlift</option>
+            <option value="pullup">Pull-Up</option>
+          </select>
+        </label>
+
+        <div class="vertical-flex">
+          <label>
+            Set:
+            <input type="number" name="set" min="1" required class="small-input" />
+          </label>
+          <label>
+            Weight (kg):
+            <input type="number" name="weight" min="0" required class="small-input" />
+          </label>
+          <label>
+            Planned Reps:
+            <input type="number" name="reps" min="1" required class="small-input" />
+          </label>
+          <label>
+            Actual Reps:
+            <input type="number" name="actual_reps" min="0" class="small-input" />
+          </label>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="back-btn-event">Back</button>
+          <button type="button" class="cancel-btn-event">Cancel</button>
+          <button type="submit" class="submit-btn-event">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- <script src="script.js"></script> -->
+  <script type="text/javascript" src="./js/renderer.js"></script>
 </body>
 </html>
-
-
